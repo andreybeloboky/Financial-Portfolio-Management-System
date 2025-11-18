@@ -1,3 +1,5 @@
+package util;
+
 public class InvestmentFactory {
 
     public static Investment createInvestment(String csvLine) {

@@ -1,3 +1,5 @@
+package model;
+
 public class MutualFund extends Investment {
     String fundCode;
     double unitsHeld;

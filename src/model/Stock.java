@@ -1,3 +1,5 @@
+package model;
+
 public class Stock extends Investment {
     String tickerSymbol;
     int shares;

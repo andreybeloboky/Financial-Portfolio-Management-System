@@ -1,3 +1,5 @@
+package model;
+
 abstract class Investment {
     private String id;
     private String name;
