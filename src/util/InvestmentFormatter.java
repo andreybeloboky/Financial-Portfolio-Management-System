@@ -1,5 +1,7 @@
 package util;
 
+import model.Investment;
+
 public class InvestmentFormatter {
 
     public static String toCsvString(Investment investment) {

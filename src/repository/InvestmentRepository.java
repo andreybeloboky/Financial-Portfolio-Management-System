@@ -1,13 +1,22 @@
 package repository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class InvestmentRepository {
 
-    private static final String FILE_PATH = "resources/portfolio.csv";
+    private static final Path FILE_PATH = Path.of("resources/portfolio.csv");
 
     public List<String> readAllLines() {
-        return null;
+        List<String> dataAll;
+        try {
+            dataAll = Files.readAllLines(FILE_PATH);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return dataAll;
     }
 
     public void writeAllLines(List<String> lines) {

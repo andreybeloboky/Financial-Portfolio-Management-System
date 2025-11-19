@@ -1,10 +1,34 @@
 package model;
 
 public class Stock extends Investment {
-    String tickerSymbol;
-    int shares;
-    double currentSharePrice;
-    double annualDividendPerShare;
+    private final String tickerSymbol;
+    private final int shares;
+    private final double currentSharePrice;
+    private final double annualDividendPerShare;
+
+    public Stock(String id, String name, String tickerSymbol, int shares, double currentSharePrice, double annualDividendPerShare) {
+        super(id, name);
+        this.tickerSymbol = tickerSymbol;
+        this.shares = shares;
+        this.currentSharePrice = currentSharePrice;
+        this.annualDividendPerShare = annualDividendPerShare;
+    }
+
+    public String getTickerSymbol() {
+        return tickerSymbol;
+    }
+
+    public int getShares() {
+        return shares;
+    }
+
+    public double getCurrentSharePrice() {
+        return currentSharePrice;
+    }
+
+    public double getAnnualDividendPerShare() {
+        return annualDividendPerShare;
+    }
 
     @Override
     double calculateCurrentValue() {

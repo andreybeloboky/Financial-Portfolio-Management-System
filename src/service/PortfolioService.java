@@ -1,16 +1,15 @@
 package service;
 
+import model.Investment;
 import repository.InvestmentRepository;
+import util.InvestmentFactory;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class PortfolioService {
-    private InvestmentRepository repository;
-
-    public PortfolioService(InvestmentRepository repository) {
-        this.repository = repository;
-    }
+    InvestmentRepository repository = new InvestmentRepository();
 
     //  Аналитика
     public double calculateTotalPortfolioValue() {
@@ -43,6 +42,12 @@ public class PortfolioService {
     }
 
     public List<Investment> getAllInvestments() {
-        return null;
+        List<String> portfolioString = repository.readAllLines();
+        List<Investment> portfolio = new LinkedList<>();
+        for (String list : portfolioString) {
+            Investment item = InvestmentFactory.createInvestment(list);
+            portfolio.add(item);
+        }
+        return portfolio;
     }
 }
