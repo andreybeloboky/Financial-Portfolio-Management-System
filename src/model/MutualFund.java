@@ -1,6 +1,7 @@
 package model;
 
 public class MutualFund extends Investment {
+
     private final String fundCode;
     private final double unitsHeld;
     private final double currentNAV;

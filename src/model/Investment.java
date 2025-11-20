@@ -1,8 +1,9 @@
 package model;
 
 public abstract class Investment {
-    private final String id;
-    private final String name;
+
+    protected final String id;
+    protected final String name;
 
     public Investment(String id, String name) {
         this.id = id;

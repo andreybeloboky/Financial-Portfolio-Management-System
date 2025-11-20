@@ -1,6 +1,7 @@
 package model;
 
 public class Stock extends Investment {
+
     private final String tickerSymbol;
     private final int shares;
     private final double currentSharePrice;

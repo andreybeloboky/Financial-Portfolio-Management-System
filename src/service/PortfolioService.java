@@ -1,9 +1,6 @@
 package service;
 
-import model.Bond;
-import model.Investment;
-import model.MutualFund;
-import model.Stock;
+import model.*;
 import repository.InvestmentRepository;
 import util.InvestmentFactory;
 import util.InvestmentFormatter;
@@ -12,18 +9,21 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class PortfolioService {
-    InvestmentRepository repository = new InvestmentRepository();
 
+    private static final String SPLIT_COMMA = ",";
+    private static final String INCORRECT_MESSAGE = "This %s doesn't exist.";
+
+    private final InvestmentRepository repository = new InvestmentRepository();
 
     public double calculateTotalPortfolioValue() {
         List<Investment> portfolio = getAllInvestments();
         double totalSum = 0;
-        for (Investment iterator : portfolio) {
-            switch (iterator) {
+        for (Investment investment : portfolio) {
+            switch (investment) {
                 case Bond bond -> totalSum += bond.calculateCurrentValue();
                 case Stock stock -> totalSum += stock.calculateCurrentValue();
                 case MutualFund mutualFund -> totalSum += mutualFund.calculateCurrentValue();
-                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+                default -> throw new IllegalStateException(INCORRECT_MESSAGE.formatted(investment));
             }
         }
         return totalSum;
@@ -32,12 +32,12 @@ public class PortfolioService {
     public double calculateTotalProjectedAnnualReturn() {
         List<Investment> portfolio = getAllInvestments();
         double totalSum = 0;
-        for (Investment iterator : portfolio) {
-            switch (iterator) {
+        for (Investment investment : portfolio) {
+            switch (investment) {
                 case Bond bond -> totalSum += bond.getProjectedAnnualReturn();
                 case Stock stock -> totalSum += stock.getProjectedAnnualReturn();
                 case MutualFund mutualFund -> totalSum += mutualFund.getProjectedAnnualReturn();
-                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+                default -> throw new IllegalStateException(INCORRECT_MESSAGE.formatted(investment));
             }
         }
         return totalSum;
@@ -49,29 +49,29 @@ public class PortfolioService {
         double bondAllocation = 0;
         double stockAllocation = 0;
         double mutualFunAllocation = 0;
-        for (Investment iterator : portfolio) {
-            switch (iterator) {
+        for (Investment investment : portfolio) {
+            switch (investment) {
                 case Bond bond -> bondAllocation += bond.calculateCurrentValue();
                 case Stock stock -> stockAllocation += stock.calculateCurrentValue();
                 case MutualFund mutualFund -> mutualFunAllocation += mutualFund.calculateCurrentValue();
-                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+                default -> throw new IllegalStateException(INCORRECT_MESSAGE.formatted(investment));
             }
         }
-        assetAllocationByType.put("Stock", stockAllocation);
-        assetAllocationByType.put("Bond", bondAllocation);
-        assetAllocationByType.put("MutualFund", mutualFunAllocation);
+        assetAllocationByType.put(InvestmentType.STOCK.toString(), stockAllocation);
+        assetAllocationByType.put(InvestmentType.BOND.toString(), bondAllocation);
+        assetAllocationByType.put(InvestmentType.MUTUALFUND.toString(), mutualFunAllocation);
         return assetAllocationByType;
     }
 
     public List<Investment> findBondsMaturingIn(int year) {
         List<Investment> portfolio = getAllInvestments();
         List<Investment> bonds = new LinkedList<>();
-        for (Investment iterator : portfolio) {
-            if (Objects.requireNonNull(iterator, "Objects mustn't be null") instanceof Bond bond) {
+        for (Investment investment : portfolio) {
+            if (Objects.requireNonNull(investment) instanceof Bond bond) {
                 LocalDate date = bond.getMaturityDate();
                 int yearBond = date.getYear();
                 if (yearBond == year) {
-                    bonds.add(iterator);
+                    bonds.add(investment);
                 }
             }
         }
@@ -83,16 +83,16 @@ public class PortfolioService {
         List<Investment> portfolio = getAllInvestments();
         double current;
         double max = 0;
-        for (Investment iterator : portfolio) {
-            switch (iterator) {
+        for (Investment investmentHighestValue : portfolio) {
+            switch (investmentHighestValue) {
                 case Bond bond -> current = bond.calculateCurrentValue();
                 case Stock stock -> current = stock.calculateCurrentValue();
                 case MutualFund mutualFund -> current = mutualFund.calculateCurrentValue();
-                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+                default -> throw new IllegalStateException(INCORRECT_MESSAGE.formatted(investment));
             }
             if (current > max) {
                 max = current;
-                investment = iterator;
+                investment = investmentHighestValue;
             }
         }
         return investment;
@@ -109,10 +109,10 @@ public class PortfolioService {
     public void deleteInvestment(String investmentId) {
         List<String> portfolioString = repository.readAllLines();
         List<String> updatedLines = new LinkedList<>();
-        for (String iterator : portfolioString) {
-            String ID = iterator.split(",")[1];
+        for (String investment : portfolioString) {
+            String ID = investment.split(SPLIT_COMMA)[1];
             if (!investmentId.equals(ID)) {
-                updatedLines.add(iterator);
+                updatedLines.add(investment);
             }
         }
         repository.writeAllLines(updatedLines);
