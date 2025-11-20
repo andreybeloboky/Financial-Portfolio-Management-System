@@ -1,8 +1,11 @@
 package repository;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
 
 public class InvestmentRepository {
@@ -20,6 +23,14 @@ public class InvestmentRepository {
     }
 
     public void writeAllLines(List<String> lines) {
-
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH.toFile()));
+            for (String iterator : lines) {
+                writer.write(iterator + "\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

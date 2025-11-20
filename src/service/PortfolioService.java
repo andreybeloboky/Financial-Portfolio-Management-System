@@ -4,6 +4,7 @@ import model.Investment;
 import repository.InvestmentRepository;
 import util.InvestmentFactory;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
 public class PortfolioService {
     InvestmentRepository repository = new InvestmentRepository();
 
-    //  Аналитика
+
     public double calculateTotalPortfolioValue() {
         return 0;
     }
@@ -32,13 +33,21 @@ public class PortfolioService {
         return null;
     }
 
-    //  CRUD
+
     public void createInvestment(Investment newInvestment) {
 
     }
 
     public void deleteInvestment(String investmentId) {
-
+        List<String> portfolioString = repository.readAllLines();
+        List<String> updatedLines = new LinkedList<>();
+        for (String iterator : portfolioString) {
+            String ID = iterator.split(",")[1];
+            if (!investmentId.equals(ID)) {
+                updatedLines.add(iterator);
+            }
+        }
+        repository.writeAllLines(updatedLines);
     }
 
     public List<Investment> getAllInvestments() {
