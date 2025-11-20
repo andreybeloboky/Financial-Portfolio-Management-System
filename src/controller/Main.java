@@ -44,6 +44,9 @@ public class Main {
             case REPORT:
                 System.out.println(service.calculateTotalPortfolioValue());
                 System.out.println(service.calculateTotalProjectedAnnualReturn());
+
+                Investment s = service.getHighestValueAsset();
+                System.out.println(s.getName());
                 break;
             case EXIT:
                 System.out.println("Goodbye");

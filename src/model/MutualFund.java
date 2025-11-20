@@ -1,10 +1,10 @@
 package model;
 
 public class MutualFund extends Investment {
-    String fundCode;
-    double unitsHeld;
-    double currentNAV;
-    double avgAnnualDistribution;
+    private final String fundCode;
+    private final double unitsHeld;
+    private final double currentNAV;
+    private final double avgAnnualDistribution;
 
     public MutualFund(String id, String name, String fundCode, double currentNAV, double avgAnnualDistribution, double unitsHeld) {
         super(id, name);

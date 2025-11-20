@@ -17,18 +17,13 @@ public class PortfolioService {
 
 
     public double calculateTotalPortfolioValue() {
-        List<String> portfolioString = repository.readAllLines();
-        List<Investment> portfolio = new LinkedList<>();
-        for (String list : portfolioString) {
-            Investment item = InvestmentFactory.createInvestment(list);
-            portfolio.add(item);
-        }
+        List<Investment> portfolio = getAllInvestments();
         double totalSum = 0;
         for (Investment iterator : portfolio) {
             switch (iterator) {
                 case Bond bond -> totalSum += bond.calculateCurrentValue();
                 case Stock stock -> totalSum += stock.calculateCurrentValue();
-                case MutualFund mutualFund -> totalSum = mutualFund.calculateCurrentValue();
+                case MutualFund mutualFund -> totalSum += mutualFund.calculateCurrentValue();
                 default -> throw new IllegalStateException("Unexpected value: " + iterator);
             }
         }
@@ -36,18 +31,13 @@ public class PortfolioService {
     }
 
     public double calculateTotalProjectedAnnualReturn() {
-        List<String> portfolioString = repository.readAllLines();
-        List<Investment> portfolio = new LinkedList<>();
-        for (String list : portfolioString) {
-            Investment item = InvestmentFactory.createInvestment(list);
-            portfolio.add(item);
-        }
+        List<Investment> portfolio = getAllInvestments();
         double totalSum = 0;
         for (Investment iterator : portfolio) {
             switch (iterator) {
                 case Bond bond -> totalSum += bond.getProjectedAnnualReturn();
                 case Stock stock -> totalSum += stock.getProjectedAnnualReturn();
-                case MutualFund mutualFund -> totalSum = mutualFund.getProjectedAnnualReturn();
+                case MutualFund mutualFund -> totalSum += mutualFund.getProjectedAnnualReturn();
                 default -> throw new IllegalStateException("Unexpected value: " + iterator);
             }
         }
@@ -59,11 +49,29 @@ public class PortfolioService {
     }
 
     public List<Investment> findBondsMaturingIn(int year) {
+        List<Investment> portfolio = getAllInvestments();
+
         return null;
     }
 
     public Investment getHighestValueAsset() {
-        return null;
+        Investment investment = null;
+        List<Investment> portfolio = getAllInvestments();
+        double current;
+        double max = 0;
+        for (Investment iterator : portfolio) {
+            switch (iterator) {
+                case Bond bond -> current = bond.calculateCurrentValue();
+                case Stock stock -> current = stock.calculateCurrentValue();
+                case MutualFund mutualFund -> current = mutualFund.calculateCurrentValue();
+                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+            }
+            if (current > max) {
+                max = current;
+                investment = iterator;
+            }
+        }
+        return investment;
     }
 
 
