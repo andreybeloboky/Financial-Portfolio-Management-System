@@ -43,6 +43,7 @@ public class Main {
                 break;
             case REPORT:
                 System.out.println(service.calculateTotalPortfolioValue());
+                System.out.println(service.calculateTotalProjectedAnnualReturn());
                 break;
             case EXIT:
                 System.out.println("Goodbye");

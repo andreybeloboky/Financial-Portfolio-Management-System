@@ -36,7 +36,22 @@ public class PortfolioService {
     }
 
     public double calculateTotalProjectedAnnualReturn() {
-        return 0;
+        List<String> portfolioString = repository.readAllLines();
+        List<Investment> portfolio = new LinkedList<>();
+        for (String list : portfolioString) {
+            Investment item = InvestmentFactory.createInvestment(list);
+            portfolio.add(item);
+        }
+        double totalSum = 0;
+        for (Investment iterator : portfolio) {
+            switch (iterator) {
+                case Bond bond -> totalSum += bond.getProjectedAnnualReturn();
+                case Stock stock -> totalSum += stock.getProjectedAnnualReturn();
+                case MutualFund mutualFund -> totalSum = mutualFund.getProjectedAnnualReturn();
+                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+            }
+        }
+        return totalSum;
     }
 
     public Map<String, Double> getAssetAllocationByType() {
