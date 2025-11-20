@@ -10,6 +10,12 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
+
+    private static final String EXIT_MESSAGE = "Goodbye";
+    private static final String SPLIT = ",";
+    private static final String ENTER_YEAR_MESSAGE = "Enter the year which you want to get:";
+
+
     public static void main(String[] args) {
         PortfolioService service = new PortfolioService();
         Scanner scanner = new Scanner(System.in);
@@ -20,9 +26,18 @@ public class Main {
             case ADD:
                 InvestmentType investmentType = InvestmentType.valueOf(splitCommand[1].toUpperCase());
                 switch (investmentType) {
-                    case STOCK -> service.createInvestment(new Stock("1", "1", "1", 1, 1.0, 1.0));
-                    case BOND -> service.createInvestment(new Bond("1", "1", 1.0, 1.0, LocalDate.of(2023, 1, 1)));
-                    case MUTUALFUND -> service.createInvestment(new MutualFund("1", "1", "1", 1.0, 1.0, 1.0));
+                    case STOCK -> {
+                        Stock newInvestment = new Stock("ID321", "Microsoft Corp.", "MSFT", 75, 310.50, 2.25);
+                        service.createInvestment(newInvestment);
+                    }
+                    case BOND -> {
+                        Bond newInvestment = new Bond("ID654", "Corporate Bond XYZ", 5000, 0.045, LocalDate.of(2028, 6, 30));
+                        service.createInvestment(newInvestment);
+                    }
+                    case MUTUALFUND -> {
+                        MutualFund newInvestment = new MutualFund("ID987", "Emerging Markets Fund", "EMF456", 120.75, 18.40, 0.95);
+                        service.createInvestment(newInvestment);
+                    }
                     default -> throw new IllegalStateException("Unexpected value: " + investmentType);
                 }
                 break;
@@ -31,11 +46,11 @@ public class Main {
                 for (Investment iterator : allPortfolio) {
                     switch (iterator) {
                         case Bond bond ->
-                                System.out.println(bond.getId() + "," + bond.getName() + "," + bond.getCouponRate() + "," + bond.getFaceValue() + "," + bond.getMaturityDate());
+                                System.out.println(bond.getId() + SPLIT + bond.getName() + SPLIT + bond.getCouponRate() + SPLIT + bond.getFaceValue() + SPLIT + bond.getMaturityDate());
                         case Stock stock ->
-                                System.out.println(stock.getId() + "," + stock.getName() + "," + stock.getTickerSymbol() + "," + stock.getShares() + "," + stock.getCurrentSharePrice() + "," + stock.getAnnualDividendPerShare());
+                                System.out.println(stock.getId() + SPLIT + stock.getName() + SPLIT + stock.getTickerSymbol() + SPLIT + stock.getShares() + SPLIT + stock.getCurrentSharePrice() + SPLIT + stock.getAnnualDividendPerShare());
                         case MutualFund mutualFund ->
-                                System.out.println(mutualFund.getId() + "," + mutualFund.getName() + "," + mutualFund.getFundCode() + "," + mutualFund.getCurrentNAV() + "," + mutualFund.getUnitsHeld() + "," + mutualFund.getAvgAnnualDistribution());
+                                System.out.println(mutualFund.getId() + SPLIT + mutualFund.getName() + SPLIT + mutualFund.getFundCode() + SPLIT + mutualFund.getCurrentNAV() + SPLIT + mutualFund.getUnitsHeld() + SPLIT + mutualFund.getAvgAnnualDistribution());
                         default -> throw new IllegalStateException("Unexpected value: " + iterator);
                     }
                 }
@@ -44,30 +59,39 @@ public class Main {
                 service.deleteInvestment(splitCommand[1]);
                 break;
             case REPORT:
-                System.out.println(service.calculateTotalPortfolioValue());
-                System.out.println(service.calculateTotalProjectedAnnualReturn());
-
-
-                Investment s = service.getHighestValueAsset();
-                System.out.println(s.getName());
-
-
-                List<Investment> f = service.findBondsMaturingIn(2030);
-                for (Investment sd : f) {
-                    if (Objects.requireNonNull(sd) instanceof Bond bond) {
-                        System.out.println(bond.getId() + "," + bond.getName());
-                    } else {
-                        throw new IllegalStateException("Unexpected value: " + sd);
+                CommandReport commandReport = CommandReport.valueOf(splitCommand[1].toUpperCase());
+                switch (commandReport) {
+                    case VALUE -> System.out.println(service.calculateTotalPortfolioValue());
+                    case RETURN -> System.out.println(service.calculateTotalProjectedAnnualReturn());
+                    case HIGHEST -> {
+                        Investment s = service.getHighestValueAsset();
+                        System.out.println(s.getName());
                     }
-                }
-
-                Map<String, Double> assetAllocationByType = service.getAssetAllocationByType();
-                for (Map.Entry<String, Double> entry : assetAllocationByType.entrySet()) {
-                    System.out.println("Key: " + entry.getKey() + ", value: " + entry.getValue());
+                    case ALLOCATION -> {
+                        Map<String, Double> assetAllocationByType = service.getAssetAllocationByType();
+                        for (Map.Entry<String, Double> entry : assetAllocationByType.entrySet()) {
+                            System.out.println("Key: " + entry.getKey() + ", value: " + entry.getValue());
+                        }
+                    }
+                    case YEAR -> {
+                        System.out.println(ENTER_YEAR_MESSAGE);
+                        int year = scanner.nextInt();
+                        List<Investment> bondInvestment = service.findBondsMaturingIn(year);
+                        if (!bondInvestment.isEmpty()) {
+                            for (Investment bondIterator : bondInvestment) {
+                                if (Objects.requireNonNull(bondIterator) instanceof Bond bond) {
+                                    System.out.println(bond.getId() + SPLIT + bond.getName());
+                                }
+                            }
+                        } else {
+                            System.out.println("There is no such a year in this list");
+                        }
+                    }
+                    default -> throw new IllegalStateException("Unexpected value: " + commandReport);
                 }
                 break;
             case EXIT:
-                System.out.println("Goodbye");
+                System.out.println(EXIT_MESSAGE);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + command);
