@@ -3,8 +3,8 @@ package service;
 import model.Investment;
 import repository.InvestmentRepository;
 import util.InvestmentFactory;
+import util.InvestmentFormatter;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,10 @@ public class PortfolioService {
 
 
     public void createInvestment(Investment newInvestment) {
-
+        List<String> portfolioString = repository.readAllLines();
+        String newPortfolio = InvestmentFormatter.toCsvString(newInvestment);
+        portfolioString.add(newPortfolio);
+        repository.writeAllLines(portfolioString);
     }
 
     public void deleteInvestment(String investmentId) {

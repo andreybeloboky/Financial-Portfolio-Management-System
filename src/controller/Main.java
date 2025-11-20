@@ -1,11 +1,9 @@
 package controller;
 
-import model.Bond;
-import model.Investment;
-import model.MutualFund;
-import model.Stock;
+import model.*;
 import service.PortfolioService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,6 +16,14 @@ public class Main {
         Command command = Command.valueOf(splitCommand[0].toUpperCase());
         switch (command) {
             case ADD:
+                InvestmentType investmentType = InvestmentType.valueOf(splitCommand[1].toUpperCase());
+                switch (investmentType) {
+                    case STOCK -> service.createInvestment(new Stock("1", "1", "1", 1, 1.0, 1.0));
+                    case BOND -> service.createInvestment(new Bond("1", "1", 1.0, 1.0, LocalDate.of(2023, 1, 1)));
+                    case MUTUALFUND -> service.createInvestment(new MutualFund("1", "1", "1", 1.0, 1.0, 1.0));
+                    default -> throw new IllegalStateException("Unexpected value: " + investmentType);
+                }
+                break;
             case LIST:
                 List<Investment> allPortfolio = service.getAllInvestments();
                 for (Investment iterator : allPortfolio) {
@@ -37,6 +43,7 @@ public class Main {
             case REPORT:
 
             case EXIT:
+                System.out.println("Goodbye");
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + command);
