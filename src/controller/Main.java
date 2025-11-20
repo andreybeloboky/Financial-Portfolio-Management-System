@@ -5,6 +5,7 @@ import service.PortfolioService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -45,8 +46,19 @@ public class Main {
                 System.out.println(service.calculateTotalPortfolioValue());
                 System.out.println(service.calculateTotalProjectedAnnualReturn());
 
+
                 Investment s = service.getHighestValueAsset();
                 System.out.println(s.getName());
+
+
+                List<Investment> f = service.findBondsMaturingIn(2030);
+                for (Investment sd : f) {
+                    if (Objects.requireNonNull(sd) instanceof Bond bond) {
+                        System.out.println(bond.getId() + "," + bond.getName());
+                    } else {
+                        throw new IllegalStateException("Unexpected value: " + sd);
+                    }
+                }
                 break;
             case EXIT:
                 System.out.println("Goodbye");

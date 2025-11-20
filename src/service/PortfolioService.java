@@ -8,9 +8,11 @@ import repository.InvestmentRepository;
 import util.InvestmentFactory;
 import util.InvestmentFormatter;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PortfolioService {
     InvestmentRepository repository = new InvestmentRepository();
@@ -45,13 +47,23 @@ public class PortfolioService {
     }
 
     public Map<String, Double> getAssetAllocationByType() {
+
         return null;
     }
 
     public List<Investment> findBondsMaturingIn(int year) {
         List<Investment> portfolio = getAllInvestments();
-
-        return null;
+        List<Investment> bonds = new LinkedList<>();
+        for (Investment iterator : portfolio) {
+            if (Objects.requireNonNull(iterator, "Objects mustn't be null") instanceof Bond bond) {
+                LocalDate date = bond.getMaturityDate();
+                int yearBond = date.getYear();
+                if (yearBond == year) {
+                    bonds.add(iterator);
+                }
+            }
+        }
+        return bonds;
     }
 
     public Investment getHighestValueAsset() {
