@@ -5,6 +5,7 @@ import service.PortfolioService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -58,6 +59,11 @@ public class Main {
                     } else {
                         throw new IllegalStateException("Unexpected value: " + sd);
                     }
+                }
+
+                Map<String, Double> assetAllocationByType = service.getAssetAllocationByType();
+                for (Map.Entry<String, Double> entry : assetAllocationByType.entrySet()) {
+                    System.out.println("Key: " + entry.getKey() + ", value: " + entry.getValue());
                 }
                 break;
             case EXIT:

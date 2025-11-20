@@ -9,10 +9,7 @@ import util.InvestmentFactory;
 import util.InvestmentFormatter;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class PortfolioService {
     InvestmentRepository repository = new InvestmentRepository();
@@ -47,8 +44,23 @@ public class PortfolioService {
     }
 
     public Map<String, Double> getAssetAllocationByType() {
-
-        return null;
+        List<Investment> portfolio = getAllInvestments();
+        Map<String, Double> assetAllocationByType = new HashMap<>();
+        double bondAllocation = 0;
+        double stockAllocation = 0;
+        double mutualFunAllocation = 0;
+        for (Investment iterator : portfolio) {
+            switch (iterator) {
+                case Bond bond -> bondAllocation += bond.calculateCurrentValue();
+                case Stock stock -> stockAllocation += stock.calculateCurrentValue();
+                case MutualFund mutualFund -> mutualFunAllocation += mutualFund.calculateCurrentValue();
+                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+            }
+        }
+        assetAllocationByType.put("Stock", stockAllocation);
+        assetAllocationByType.put("Bond", bondAllocation);
+        assetAllocationByType.put("MutualFund", mutualFunAllocation);
+        return assetAllocationByType;
     }
 
     public List<Investment> findBondsMaturingIn(int year) {
