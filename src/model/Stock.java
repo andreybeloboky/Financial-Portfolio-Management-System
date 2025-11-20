@@ -31,12 +31,12 @@ public class Stock extends Investment {
     }
 
     @Override
-    double calculateCurrentValue() {
+    public double calculateCurrentValue() {
         return shares * currentSharePrice;
     }
 
     @Override
-    double getProjectedAnnualReturn() {
+    public double getProjectedAnnualReturn() {
         return shares * annualDividendPerShare;
     }
 }

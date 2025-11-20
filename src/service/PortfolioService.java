@@ -1,6 +1,9 @@
 package service;
 
+import model.Bond;
 import model.Investment;
+import model.MutualFund;
+import model.Stock;
 import repository.InvestmentRepository;
 import util.InvestmentFactory;
 import util.InvestmentFormatter;
@@ -14,7 +17,22 @@ public class PortfolioService {
 
 
     public double calculateTotalPortfolioValue() {
-        return 0;
+        List<String> portfolioString = repository.readAllLines();
+        List<Investment> portfolio = new LinkedList<>();
+        for (String list : portfolioString) {
+            Investment item = InvestmentFactory.createInvestment(list);
+            portfolio.add(item);
+        }
+        double totalSum = 0;
+        for (Investment iterator : portfolio) {
+            switch (iterator) {
+                case Bond bond -> totalSum += bond.calculateCurrentValue();
+                case Stock stock -> totalSum += stock.calculateCurrentValue();
+                case MutualFund mutualFund -> totalSum = mutualFund.calculateCurrentValue();
+                default -> throw new IllegalStateException("Unexpected value: " + iterator);
+            }
+        }
+        return totalSum;
     }
 
     public double calculateTotalProjectedAnnualReturn() {

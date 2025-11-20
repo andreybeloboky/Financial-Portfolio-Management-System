@@ -28,12 +28,12 @@ public class Bond extends Investment {
     }
 
     @Override
-    double calculateCurrentValue() {
+    public double calculateCurrentValue() {
         return faceValue;
     }
 
     @Override
-    double getProjectedAnnualReturn() {
+    public double getProjectedAnnualReturn() {
         return faceValue * couponRate;
     }
 }

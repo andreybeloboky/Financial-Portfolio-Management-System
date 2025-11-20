@@ -31,12 +31,12 @@ public class MutualFund extends Investment {
     }
 
     @Override
-    double calculateCurrentValue() {
+    public double calculateCurrentValue() {
         return unitsHeld * currentNAV;
     }
 
     @Override
-    double getProjectedAnnualReturn() {
+    public double getProjectedAnnualReturn() {
         return unitsHeld * avgAnnualDistribution;
     }
 }

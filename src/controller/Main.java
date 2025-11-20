@@ -40,8 +40,10 @@ public class Main {
                 break;
             case DELETE:
                 service.deleteInvestment(splitCommand[1]);
+                break;
             case REPORT:
-
+                System.out.println(service.calculateTotalPortfolioValue());
+                break;
             case EXIT:
                 System.out.println("Goodbye");
                 break;
