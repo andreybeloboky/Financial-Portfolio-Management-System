@@ -3,7 +3,6 @@ package service;
 import model.*;
 import repository.InvestmentRepository;
 import mapper.InvestmentMapper;
-import mapper.InvestmentFormatter;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -88,7 +87,7 @@ public class PortfolioService {
 
     public void createInvestment(Investment newInvestment) {
         List<String> portfolioString = repository.readAllLines();
-        String newPortfolio = InvestmentFormatter.toCsvString(newInvestment);
+        String newPortfolio = InvestmentMapper.toCsvString(newInvestment);
         portfolioString.add(newPortfolio);
         repository.writeAllLines(portfolioString);
     }
