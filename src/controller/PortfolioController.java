@@ -9,13 +9,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Main {
+public class PortfolioController {
 
     private static final String EXIT_MESSAGE = "Goodbye";
     private static final String SPLIT_COMMA = ",";
     private static final String SPLIT_WHITESPACE = " ";
     private static final String ENTER_YEAR_MESSAGE = "Enter the year which you want to get:";
-    private static final String YEAR_ERROR_MESSAGE = "There is no such a year in this list";
+    private static final String YEAR_ERROR_MESSAGE = "There is no such %s year in this list";
     private static final String INCORRECT_MESSAGE = "This %s doesn't exist.";
     private static final String VALUE = "%s value %s \n";
 
@@ -38,7 +38,7 @@ public class Main {
                         Bond newInvestment = new Bond("ID654", "Corporate Bond XYZ", 5000, 0.045, LocalDate.of(2028, 6, 30));
                         service.createInvestment(newInvestment);
                     }
-                    case MUTUALFUND -> {
+                    case MUTUAL_FUND -> {
                         MutualFund newInvestment = new MutualFund("ID987", "Emerging Markets Fund", "EMF456", 120.75, 18.40, 0.95);
                         service.createInvestment(newInvestment);
                     }
@@ -67,8 +67,8 @@ public class Main {
                     case VALUE -> System.out.println(service.calculateTotalPortfolioValue());
                     case RETURN -> System.out.println(service.calculateTotalProjectedAnnualReturn());
                     case HIGHEST -> {
-                        Investment s = service.getHighestValueAsset();
-                        System.out.println(s.getName());
+                        Investment highestValueAsset = service.getHighestValueAsset();
+                        System.out.println(highestValueAsset.getName());
                     }
                     case ALLOCATION -> {
                         Map<String, Double> assetAllocationByType = service.getAssetAllocationByType();
@@ -87,7 +87,7 @@ public class Main {
                                 }
                             }
                         } else {
-                            System.out.println(YEAR_ERROR_MESSAGE);
+                            System.out.printf(YEAR_ERROR_MESSAGE.formatted(year));
                         }
                     }
                 }

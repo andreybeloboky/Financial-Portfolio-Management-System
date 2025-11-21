@@ -1,4 +1,4 @@
-package util;
+package mapper;
 
 import model.Bond;
 import model.Investment;

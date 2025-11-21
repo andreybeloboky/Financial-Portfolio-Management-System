@@ -12,22 +12,18 @@ public class InvestmentRepository {
     private static final Path FILE_PATH = Path.of("resources/portfolio.csv");
 
     public List<String> readAllLines() {
-        List<String> dataAll;
         try {
-            dataAll = Files.readAllLines(FILE_PATH);
+            return Files.readAllLines(FILE_PATH);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return dataAll;
     }
 
     public void writeAllLines(List<String> lines) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH.toFile()));
-            for (String iterator : lines) {
-                writer.write(iterator + "\n");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH.toFile()))) {
+            for (String string : lines) {
+                writer.write(string + "\n");
             }
-            writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

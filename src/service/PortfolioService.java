@@ -2,11 +2,13 @@ package service;
 
 import model.*;
 import repository.InvestmentRepository;
-import util.InvestmentFactory;
-import util.InvestmentFormatter;
+import mapper.InvestmentMapper;
+import mapper.InvestmentFormatter;
 
 import java.time.LocalDate;
 import java.util.*;
+
+import static java.util.Objects.requireNonNull;
 
 public class PortfolioService {
 
@@ -19,12 +21,7 @@ public class PortfolioService {
         List<Investment> portfolio = getAllInvestments();
         double totalSum = 0;
         for (Investment investment : portfolio) {
-            switch (investment) {
-                case Bond bond -> totalSum += bond.calculateCurrentValue();
-                case Stock stock -> totalSum += stock.calculateCurrentValue();
-                case MutualFund mutualFund -> totalSum += mutualFund.calculateCurrentValue();
-                default -> throw new IllegalStateException(INCORRECT_MESSAGE.formatted(investment));
-            }
+            totalSum += investment.calculateCurrentValue();
         }
         return totalSum;
     }
@@ -33,12 +30,7 @@ public class PortfolioService {
         List<Investment> portfolio = getAllInvestments();
         double totalSum = 0;
         for (Investment investment : portfolio) {
-            switch (investment) {
-                case Bond bond -> totalSum += bond.getProjectedAnnualReturn();
-                case Stock stock -> totalSum += stock.getProjectedAnnualReturn();
-                case MutualFund mutualFund -> totalSum += mutualFund.getProjectedAnnualReturn();
-                default -> throw new IllegalStateException(INCORRECT_MESSAGE.formatted(investment));
-            }
+            totalSum += investment.getProjectedAnnualReturn();
         }
         return totalSum;
     }
@@ -59,7 +51,7 @@ public class PortfolioService {
         }
         assetAllocationByType.put(InvestmentType.STOCK.toString(), stockAllocation);
         assetAllocationByType.put(InvestmentType.BOND.toString(), bondAllocation);
-        assetAllocationByType.put(InvestmentType.MUTUALFUND.toString(), mutualFunAllocation);
+        assetAllocationByType.put(InvestmentType.MUTUAL_FUND.toString(), mutualFunAllocation);
         return assetAllocationByType;
     }
 
@@ -67,7 +59,7 @@ public class PortfolioService {
         List<Investment> portfolio = getAllInvestments();
         List<Investment> bonds = new LinkedList<>();
         for (Investment investment : portfolio) {
-            if (Objects.requireNonNull(investment) instanceof Bond bond) {
+            if (requireNonNull(investment) instanceof Bond bond) {
                 LocalDate date = bond.getMaturityDate();
                 int yearBond = date.getYear();
                 if (yearBond == year) {
@@ -84,12 +76,7 @@ public class PortfolioService {
         double current;
         double max = 0;
         for (Investment investmentHighestValue : portfolio) {
-            switch (investmentHighestValue) {
-                case Bond bond -> current = bond.calculateCurrentValue();
-                case Stock stock -> current = stock.calculateCurrentValue();
-                case MutualFund mutualFund -> current = mutualFund.calculateCurrentValue();
-                default -> throw new IllegalStateException(INCORRECT_MESSAGE.formatted(investment));
-            }
+            current = investmentHighestValue.calculateCurrentValue();
             if (current > max) {
                 max = current;
                 investment = investmentHighestValue;
@@ -122,7 +109,7 @@ public class PortfolioService {
         List<String> portfolioString = repository.readAllLines();
         List<Investment> portfolio = new LinkedList<>();
         for (String list : portfolioString) {
-            Investment item = InvestmentFactory.createInvestment(list);
+            Investment item = InvestmentMapper.createInvestment(list);
             portfolio.add(item);
         }
         return portfolio;

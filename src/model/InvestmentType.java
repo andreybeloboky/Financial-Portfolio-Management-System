@@ -1,5 +1,5 @@
 package model;
 
 public enum InvestmentType {
-    BOND, STOCK, MUTUALFUND
+    BOND, STOCK, MUTUAL_FUND
 }

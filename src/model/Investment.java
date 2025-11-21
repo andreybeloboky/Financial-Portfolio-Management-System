@@ -18,7 +18,7 @@ public abstract class Investment {
         return name;
     }
 
-    abstract double calculateCurrentValue();
+    public abstract double calculateCurrentValue();
 
-    abstract double getProjectedAnnualReturn();
+    public abstract double getProjectedAnnualReturn();
 }

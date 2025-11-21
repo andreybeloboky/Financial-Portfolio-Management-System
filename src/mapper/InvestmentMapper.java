@@ -1,10 +1,10 @@
-package util;
+package mapper;
 
 import model.*;
 
 import java.time.LocalDate;
 
-public class InvestmentFactory {
+public class InvestmentMapper {
 
     private static final String SPLIT = ",";
 
@@ -16,7 +16,7 @@ public class InvestmentFactory {
                     new Bond(split[1], split[2], Double.parseDouble(split[3]), Double.parseDouble(split[4]), LocalDate.parse(split[5]));
             case STOCK ->
                     new Stock(split[1], split[2], split[3], Integer.parseInt(split[4]), Double.parseDouble(split[5]), Double.parseDouble(split[6]));
-            case MUTUALFUND ->
+            case MUTUAL_FUND ->
                     new MutualFund(split[1], split[2], split[3], Double.parseDouble(split[4]), Double.parseDouble(split[5]), Double.parseDouble(split[6]));
         };
     }
