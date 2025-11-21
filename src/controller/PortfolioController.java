@@ -67,11 +67,11 @@ public class PortfolioController {
                     case VALUE -> System.out.println(service.calculateTotalPortfolioValue());
                     case RETURN -> System.out.println(service.calculateTotalProjectedAnnualReturn());
                     case HIGHEST -> {
-                        Investment highestValueAsset = service.getHighestValueAsset();
+                        Investment highestValueAsset = service.findHighestValueAsset();
                         System.out.println(highestValueAsset.getName());
                     }
                     case ALLOCATION -> {
-                        Map<String, Double> assetAllocationByType = service.getAssetAllocationByType();
+                        Map<String, Double> assetAllocationByType = service.findAssetAllocationByType();
                         for (Map.Entry<String, Double> entry : assetAllocationByType.entrySet()) {
                             System.out.printf(VALUE.formatted(entry.getKey(), entry.getValue()));
                         }

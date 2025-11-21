@@ -34,7 +34,7 @@ public class PortfolioService {
         return totalSum;
     }
 
-    public Map<String, Double> getAssetAllocationByType() {
+    public Map<String, Double> findAssetAllocationByType() {
         List<Investment> portfolio = getAllInvestments();
         Map<String, Double> assetAllocationByType = new HashMap<>();
         double bondAllocation = 0;
@@ -69,7 +69,7 @@ public class PortfolioService {
         return bonds;
     }
 
-    public Investment getHighestValueAsset() {
+    public Investment findHighestValueAsset() {
         Investment investment = null;
         List<Investment> portfolio = getAllInvestments();
         double current;
