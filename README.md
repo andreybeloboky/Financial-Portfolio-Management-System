@@ -1,5 +1,5 @@
 # \[GitHub]a command-line application (CLI) to manage a personal investment portfolio. 
-The application must support different types of assets (Stocks, Bonds, Mutual Funds), persist the portfolio in a CSV file, and provide complex analytics.
+The application must support different types of assets (Stocks, Bonds, MutualFunds), persist the portfolio in a CSV file, and provide complex analytics.
 #
 # Step 1; - Install JDK 17.
 #
